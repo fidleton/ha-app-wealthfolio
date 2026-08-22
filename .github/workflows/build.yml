@@ -1,0 +1,28 @@
+name: Add-on build
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        arch: [amd64, aarch64]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: home-assistant/builder@master
+        with:
+          args: |
+            --${{ matrix.arch }}
+            --target /data
+            --docker-hub ghcr.io
+            --docker-hub-username ${{ github.actor }}
+            --docker-hub-password ${{ secrets.GITHUB_TOKEN }}

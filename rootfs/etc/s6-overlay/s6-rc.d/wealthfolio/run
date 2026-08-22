@@ -1,0 +1,33 @@
+#!/command/with-contenv bashio
+set -e
+
+secret_key="$(bashio::config 'secret_key')"
+if bashio::var.is_empty "${secret_key}" || [ "${secret_key}" = "null" ]; then
+    bashio::log.error "The secret_key add-on option must be configured and backed up."
+    exit 1
+fi
+
+auth_password_hash="$(bashio::config 'auth_password_hash')"
+auth_required="$(bashio::config 'auth_required')"
+if [ "${auth_required}" = "true" ] && bashio::var.is_empty "${auth_password_hash}"; then
+    bashio::log.error "auth_password_hash is required when authentication is enabled."
+    exit 1
+fi
+
+cors_allow_origins="$(bashio::config 'cors_allow_origins')"
+if [ "${auth_required}" = "true" ] && bashio::var.is_empty "${cors_allow_origins}"; then
+    bashio::log.error "cors_allow_origins must match the Home Assistant origin when authentication is enabled."
+    exit 1
+fi
+
+export WF_LISTEN_ADDR="0.0.0.0:8088"
+export WF_DB_PATH="/data/wealthfolio.db"
+export WF_SECRET_KEY="${secret_key}"
+export WF_AUTH_PASSWORD_HASH="${auth_password_hash}"
+export WF_AUTH_REQUIRED="${auth_required}"
+export WF_CORS_ALLOW_ORIGINS="${cors_allow_origins}"
+export WF_AUTH_TOKEN_TTL_MINUTES="$(bashio::config 'auth_token_ttl_minutes')"
+export WF_REQUEST_TIMEOUT_MS="$(bashio::config 'request_timeout_ms')"
+export WF_COOKIE_SECURE="$(bashio::config 'cookie_secure')"
+
+exec /usr/local/bin/wealthfolio-server

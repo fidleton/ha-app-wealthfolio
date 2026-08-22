@@ -12,7 +12,7 @@
   "ingress": true,
   "ingress_port": 8088,
   "panel_icon": "mdi:chart-line",
-  "image": "ghcr.io/fidleton/ha-app-wealthfolio-{arch}",
+  "image": "ghcr.io/fidleton/ha-app-wealthfolio",
   "options": {
     "secret_key": null,
     "auth_password_hash": null,

@@ -8,8 +8,7 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: frenck/action-addon-linter@v2.21.1
         with:
-          apparmor: false
           path: .

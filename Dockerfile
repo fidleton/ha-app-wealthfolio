@@ -1,7 +1,7 @@
 FROM wealthfolio/wealthfolio:3.6.3
 
 ARG BUILD_ARCH
-ARG BASHIO_VERSION=0.16.2
+ARG BASHIO_VERSION=0.19.0
 ARG S6_OVERLAY_VERSION=3.1.6.2
 
 ENV \
@@ -12,7 +12,7 @@ ENV \
 
 USER root
 
-RUN apk add --no-cache bash ca-certificates curl jq xz \
+RUN apk add --no-cache bash ca-certificates curl jq nginx xz openssl \
 	&& S6_ARCH="${BUILD_ARCH}" \
 	&& if [ "${BUILD_ARCH}" = "amd64" ]; then S6_ARCH="x86_64"; fi \
 	&& curl -fsSL "https://github.com/just-containers/s6-overlay/releases/download/v${S6_OVERLAY_VERSION}/s6-overlay-noarch.tar.xz" | tar -xJp -C / \
@@ -24,8 +24,6 @@ RUN apk add --no-cache bash ca-certificates curl jq xz \
 	&& rm -rf /tmp/bashio
 
 COPY rootfs /
-
-USER 1000:1000
 
 ENTRYPOINT ["/init"]
 

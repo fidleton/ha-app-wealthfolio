@@ -23,8 +23,15 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       matrix: ${{ steps.matrix.outputs.matrix }}
+      tag: ${{ steps.normalize-tag.outputs.tag }}
     steps:
       - uses: actions/checkout@v5
+      - name: Normalize image tag
+        id: normalize-tag
+        env:
+          INPUT_TAG: ${{ github.event.release.tag_name || inputs.tag }}
+        run: echo "tag=${INPUT_TAG#v}" >> "$GITHUB_OUTPUT"
+
       - name: Prepare build matrix
         id: matrix
         uses: home-assistant/builder/actions/prepare-multi-arch-matrix@2026.06.0
@@ -53,10 +60,10 @@ jobs:
           container-registry-password: ${{ secrets.GITHUB_TOKEN }}
           image: ${{ matrix.image }}
           image-tags: |
-            ${{ github.event.release.tag_name || inputs.tag }}
+            ${{ needs.init.outputs.tag }}
             latest
           push: "true"
-          version: ${{ github.event.release.tag_name || inputs.tag }}
+          version: ${{ needs.init.outputs.tag }}
 
   manifest:
     name: Publish multi-architecture manifest
@@ -73,6 +80,6 @@ jobs:
           container-registry-password: ${{ secrets.GITHUB_TOKEN }}
           image-name: ${{ env.IMAGE_NAME }}
           image-tags: |
-            ${{ github.event.release.tag_name || inputs.tag }}
+            ${{ needs.init.outputs.tag }}
             latest
           registry-prefix: ghcr.io/fidleton

@@ -14,13 +14,17 @@ Authentication is disabled in this app configuration.
 
 The app supports `amd64` and `aarch64` hosts. To enable direct HTTPS access,
 open the add-on's **Network** settings, assign a host port for `8443/tcp`, then
-access `https://<home-assistant-host>:<configured-port>`. The app uses the Home
-Assistant certificates mounted at `/ssl/fullchain.pem` and `/ssl/privkey.pem`.
+access `https://<home-assistant-host>:<configured-port>`. By default, the app
+uses the Home Assistant certificates mounted at `/ssl/fullchain.pem` and
+`/ssl/privkey.pem`.
 
 ## Configuration
 
 - `secret_key`: optional. The app generates and persists a key automatically on
   first start when this is omitted.
+- `certificate_file`: certificate filename in `/ssl`; defaults to
+   `fullchain.pem`.
+- `private_key_file`: private key filename in `/ssl`; defaults to `privkey.pem`.
 
 Back up `secret_key`. Losing it makes encrypted credentials in the data volume
 unrecoverable. The app listens internally on port 8089 behind the Nginx proxy,

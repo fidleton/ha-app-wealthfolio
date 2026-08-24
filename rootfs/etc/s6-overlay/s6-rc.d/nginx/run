@@ -1,9 +1,17 @@
 #!/command/with-contenv bashio
 set -e
 
-if [[ ! -r /ssl/fullchain.pem || ! -r /ssl/privkey.pem ]]; then
+certificate_file="$(bashio::config 'certificate_file')"
+private_key_file="$(bashio::config 'private_key_file')"
+
+sed -i \
+  -e "s|/ssl/fullchain\.pem|/ssl/${certificate_file}|g" \
+  -e "s|/ssl/privkey\.pem|/ssl/${private_key_file}|g" \
+  /etc/nginx/http.d/tls.conf
+
+if [[ ! -r "/ssl/${certificate_file}" || ! -r "/ssl/${private_key_file}" ]]; then
 	rm -f /etc/nginx/http.d/tls.conf
-	bashio::log.warning "TLS disabled: /ssl/fullchain.pem and /ssl/privkey.pem are required"
+	bashio::log.warning "TLS disabled: /ssl/${certificate_file} and /ssl/${private_key_file} are required"
 fi
 
 exec nginx -g 'daemon off;'

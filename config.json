@@ -23,8 +23,12 @@
   "webui": "https://[HOST]:[PORT:8443]",
   "panel_icon": "mdi:chart-line",
   "options": {
+    "certificate_file": "fullchain.pem",
+    "private_key_file": "privkey.pem"
   },
   "schema": {
-    "secret_key": "password?"
+    "secret_key": "password?",
+    "certificate_file": "str",
+    "private_key_file": "str"
   }
 }

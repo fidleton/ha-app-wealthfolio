@@ -48,15 +48,7 @@ Assistant Supervisor tooling expected by Home Assistant app development.
 1. Install the Dev Containers extension.
 2. Open this repository in VS Code and run **Dev Containers: Reopen in
    Container**.
-3. Start the local Home Assistant Supervisor from the container terminal:
-
-   ```sh
-   supervisor_run
-   ```
-
-   Alternatively, use the VS Code task **Start Home Assistant**.
-
-4. Prepare the local app environment so Supervisor builds this checkout instead
+3. Prepare the local app environment so Supervisor builds this checkout instead
    of using the published registry image:
 
    ```sh
@@ -66,6 +58,14 @@ Assistant Supervisor tooling expected by Home Assistant app development.
    Alternatively, use the VS Code task **Prepare local App environment**. This
    removes the `image` field from `config.json` temporarily so the current
    checkout's `Dockerfile` is built and the app is installed as a local add-on.
+
+4. Start the local Home Assistant Supervisor from the container terminal:
+
+   ```sh
+   supervisor_run
+   ```
+
+   Alternatively, use the VS Code task **Start Home Assistant**.
 
 5. Open the app through Home Assistant's **Open Web UI** ingress button.
 

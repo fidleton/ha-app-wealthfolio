@@ -20,7 +20,6 @@
   "ports_description": {
     "8443/tcp": "Wealthfolio web interface (HTTPS)"
   },
-  "webui": "https://[HOST]:[PORT:8443]",
   "panel_icon": "mdi:chart-line",
   "options": {
     "ssl_tls": {

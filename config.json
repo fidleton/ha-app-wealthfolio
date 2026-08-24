@@ -11,20 +11,20 @@
   "init": false,
   "ingress": true,
   "ingress_port": 8088,
+  "map": [
+    "ssl:ro"
+  ],
+  "ports": {
+    "8443/tcp": null
+  },
+  "ports_description": {
+    "8443/tcp": "Wealthfolio web interface (HTTPS)"
+  },
+  "webui": "https://[HOST]:[PORT:8443]",
   "panel_icon": "mdi:chart-line",
   "options": {
-    "auth_required": false,
-    "auth_token_ttl_minutes": 60,
-    "request_timeout_ms": 30000,
-    "cookie_secure": "auto"
   },
   "schema": {
-    "secret_key": "password?",
-    "auth_password_hash": "password?",
-    "auth_required": "bool",
-    "cors_allow_origins": "str?",
-    "auth_token_ttl_minutes": "int",
-    "request_timeout_ms": "int",
-    "cookie_secure": "str"
+    "secret_key": "password?"
   }
 }

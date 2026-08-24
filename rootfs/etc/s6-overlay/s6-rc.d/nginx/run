@@ -1,4 +1,9 @@
 #!/command/with-contenv bashio
 set -e
 
+if [[ ! -r /ssl/fullchain.pem || ! -r /ssl/privkey.pem ]]; then
+	rm -f /etc/nginx/http.d/tls.conf
+	bashio::log.warning "TLS disabled: /ssl/fullchain.pem and /ssl/privkey.pem are required"
+fi
+
 exec nginx -g 'daemon off;'

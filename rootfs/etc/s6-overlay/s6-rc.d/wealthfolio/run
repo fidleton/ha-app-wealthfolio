@@ -7,41 +7,12 @@ if ! bashio::config.has_value "secret_key"; then
 fi
 secret_key=$(bashio::config "secret_key")
 
-auth_required="$(bashio::config 'auth_required')"
-if [ "${auth_required}" = "true" ]; then
-    if ! bashio::var.has_value "auth_password_hash"; then
-        bashio::log.error "auth_password_hash is required when authentication is enabled."
-        exit 1
-    else
-        auth_password_hash="$(bashio::config 'auth_password_hash')"
-    fi
-else
-    auth_password_hash=""
-fi
-
-if [ "${auth_required}" = "true" ]; then
-    if ! bashio::var.has_value "cors_allow_origins"; then
-        bashio::log.error "cors_allow_origins must match the Home Assistant origin when authentication is enabled."
-        exit 1
-    else
-        cors_allow_origins="$(bashio::config 'cors_allow_origins')"
-    fi
-else
-    cors_allow_origins=""
-fi
-
 export WF_LISTEN_ADDR="127.0.0.1:8089"
 export WF_STATIC_DIR="/app/dist"
 export WF_DB_PATH="/data/wealthfolio.db"
 export WF_SECRET_KEY="${secret_key}"
-export WF_AUTH_PASSWORD_HASH="${auth_password_hash}"
-export WF_AUTH_REQUIRED="${auth_required}"
-export WF_CORS_ALLOW_ORIGINS="${cors_allow_origins}"
-auth_token_ttl_minutes="$(bashio::config 'auth_token_ttl_minutes')"
-export WF_AUTH_TOKEN_TTL_MINUTES="${auth_token_ttl_minutes}"
-request_timeout_ms="$(bashio::config 'request_timeout_ms')"
-export WF_REQUEST_TIMEOUT_MS="${request_timeout_ms}"
-cookie_secure="$(bashio::config 'cookie_secure')"
-export WF_COOKIE_SECURE="${cookie_secure}"
+export WF_AUTH_PASSWORD_HASH=""
+export WF_AUTH_REQUIRED="false"
+export WF_CORS_ALLOW_ORIGINS=""
 
 exec /usr/local/bin/wealthfolio-server

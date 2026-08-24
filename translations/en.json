@@ -17,6 +17,20 @@
     "secret_key": {
       "name": "Secret key",
       "description": "Optional key used to encrypt stored secrets. When omitted, a key is generated and persisted automatically. Back up this key with the app data."
+    },
+    "authentication": {
+      "name": "Authentication",
+      "description": "Credentials required for direct HTTPS access.",
+      "fields": {
+        "username": {
+          "name": "Username",
+          "description": "Username for direct HTTPS access."
+        },
+        "password": {
+          "name": "Password",
+          "description": "Password for direct HTTPS access."
+        }
+      }
     }
   }
 }

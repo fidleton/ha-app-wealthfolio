@@ -3,6 +3,22 @@ set -e
 
 certificate_file="$(bashio::config 'ssl_tls.certificate_file')"
 private_key_file="$(bashio::config 'ssl_tls.private_key_file')"
+auth_username="$(bashio::config 'authentication.username')"
+auth_password="$(bashio::config 'authentication.password')"
+
+if [[ -z "${auth_username}" || "${auth_username}" == *:* || "${auth_username}" == *$'\n'* || "${auth_username}" == *$'\r'* ]]; then
+  bashio::log.error "External HTTPS authentication requires a non-empty username without colons or line breaks."
+  exit 1
+fi
+if [[ -z "${auth_password}" ]]; then
+  bashio::log.error "External HTTPS authentication requires a non-empty password."
+  exit 1
+fi
+
+password_hash="$(printf '%s' "${auth_password}" | openssl passwd -6 -stdin)"
+printf '%s:%s\n' "${auth_username}" "${password_hash}" > /run/nginx.htpasswd
+chown nginx:nginx /run/nginx.htpasswd
+chmod 640 /run/nginx.htpasswd
 
 cp /etc/nginx/http.d/tls.conf.template /etc/nginx/http.d/tls.conf
 sed -i \

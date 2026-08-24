@@ -10,7 +10,9 @@ ingress and direct access from the network.
 Add this repository to Home Assistant, install the Wealthfolio app, then start
 it. Open the application with Home Assistant's **Open Web UI** button.
 
-Authentication is disabled in this app configuration.
+Direct HTTPS access uses HTTP Basic Authentication. Configure the add-on's
+`authentication` username and password options. Home Assistant ingress access
+remains unchanged.
 
 The app supports `amd64` and `aarch64` hosts. To enable direct HTTPS access,
 open the add-on's **Network** settings, assign a host port for `8443/tcp`, then
@@ -22,6 +24,9 @@ uses the Home Assistant certificates mounted at `/ssl/fullchain.pem` and
 
 - `secret_key`: optional. The app generates and persists a key automatically on
   first start when this is omitted.
+- `authentication.username`: username required for direct HTTPS access;
+  defaults to `wealthfolio`.
+- `authentication.password`: password required for direct HTTPS access.
 - `ssl_tls.certificate_file`: certificate filename in `/ssl`; defaults to
   `fullchain.pem`.
 - `ssl_tls.private_key_file`: private key filename in `/ssl`; defaults to

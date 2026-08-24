@@ -26,6 +26,10 @@
     "ssl_tls": {
       "certificate_file": "fullchain.pem",
       "private_key_file": "privkey.pem"
+    },
+    "authentication": {
+      "username": "wealthfolio",
+      "password": ""
     }
   },
   "schema": {
@@ -33,6 +37,10 @@
       "certificate_file": "str",
       "private_key_file": "str"
     },
-    "secret_key": "password?"
+    "secret_key": "password?",
+    "authentication": {
+      "username": "str",
+      "password": "password"
+    }
   }
 }

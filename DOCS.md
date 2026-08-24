@@ -5,9 +5,11 @@
 The configurable app options are:
 
 - `secret_key`: optional. When omitted, the app generates a key on first start
-	and persists it in the app configuration.
-- `certificate_file`: certificate filename in `/ssl`; default `fullchain.pem`.
-- `private_key_file`: private key filename in `/ssl`; default `privkey.pem`.
+  and persists it in the app configuration.
+- `ssl_tls.certificate_file`: certificate filename in `/ssl`; default
+  `fullchain.pem`.
+- `ssl_tls.private_key_file`: private key filename in `/ssl`; default
+  `privkey.pem`.
 
 Back up `secret_key` together with the app data. Changing or losing it makes
 existing encrypted secrets unreadable.

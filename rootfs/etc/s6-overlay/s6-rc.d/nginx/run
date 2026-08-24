@@ -1,9 +1,10 @@
 #!/command/with-contenv bashio
 set -e
 
-certificate_file="$(bashio::config 'certificate_file')"
-private_key_file="$(bashio::config 'private_key_file')"
+certificate_file="$(bashio::config 'ssl_tls.certificate_file')"
+private_key_file="$(bashio::config 'ssl_tls.private_key_file')"
 
+cp /etc/nginx/http.d/tls.conf.template /etc/nginx/http.d/tls.conf
 sed -i \
   -e "s|/ssl/fullchain\.pem|/ssl/${certificate_file}|g" \
   -e "s|/ssl/privkey\.pem|/ssl/${private_key_file}|g" \
@@ -11,7 +12,7 @@ sed -i \
 
 if [[ ! -r "/ssl/${certificate_file}" || ! -r "/ssl/${private_key_file}" ]]; then
 	rm -f /etc/nginx/http.d/tls.conf
-	bashio::log.warning "TLS disabled: /ssl/${certificate_file} and /ssl/${private_key_file} are required"
+	bashio::log.warning "TLS disabled: /ssl/${certificate_file} and/or /ssl/${private_key_file} do not exist or are not readable."
 fi
 
 exec nginx -g 'daemon off;'

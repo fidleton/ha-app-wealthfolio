@@ -22,9 +22,10 @@ uses the Home Assistant certificates mounted at `/ssl/fullchain.pem` and
 
 - `secret_key`: optional. The app generates and persists a key automatically on
   first start when this is omitted.
-- `certificate_file`: certificate filename in `/ssl`; defaults to
-   `fullchain.pem`.
-- `private_key_file`: private key filename in `/ssl`; defaults to `privkey.pem`.
+- `ssl_tls.certificate_file`: certificate filename in `/ssl`; defaults to
+  `fullchain.pem`.
+- `ssl_tls.private_key_file`: private key filename in `/ssl`; defaults to
+  `privkey.pem`.
 
 Back up `secret_key`. Losing it makes encrypted credentials in the data volume
 unrecoverable. The app listens internally on port 8089 behind the Nginx proxy,

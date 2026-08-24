@@ -1,0 +1,22 @@
+{
+  "configuration": {
+    "ssl_tls": {
+      "name": "SSL/TLS",
+      "description": "Configure the certificate files used for direct HTTPS access.",
+      "fields": {
+        "certificate_file": {
+          "name": "Certificate file",
+          "description": "Certificate filename in /ssl."
+        },
+        "private_key_file": {
+          "name": "Private key file",
+          "description": "Private key filename in /ssl."
+        }
+      }
+    },
+    "secret_key": {
+      "name": "Secret key",
+      "description": "Optional key used to encrypt stored secrets. When omitted, a key is generated and persisted automatically. Back up this key with the app data."
+    }
+  }
+}

@@ -1,6 +1,6 @@
 {
   "name": "Wealthfolio",
-  "version": "1.0.0",
+  "version": "dev",
   "slug": "wealthfolio",
   "description": "Private portfolio tracker for your personal finances.",
   "url": "https://github.com/fidleton/ha-app-wealthfolio",

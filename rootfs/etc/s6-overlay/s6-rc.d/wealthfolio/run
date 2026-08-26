@@ -7,7 +7,7 @@ if ! bashio::config.has_value "secret_key"; then
 fi
 secret_key=$(bashio::config "secret_key")
 
-export WF_LISTEN_ADDR="127.0.0.1:8089"
+#export WF_LISTEN_ADDR="127.0.0.1:8089"
 export WF_STATIC_DIR="/app/dist"
 export WF_DB_PATH="/data/wealthfolio.db"
 export WF_SECRET_KEY="${secret_key}"

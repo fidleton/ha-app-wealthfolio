@@ -3,7 +3,7 @@
   "image": "ghcr.io/home-assistant/devcontainer:6-apps",
   "overrideCommand": false,
   "remoteUser": "vscode",
-  "appPort": ["7123:8123", "7180:80", "7357:4357", "7443:8443"],
+  "appPort": ["7123:8123", "7180:80", "7357:4357", "7443:7443"],
   "postStartCommand": "bash devcontainer_bootstrap && sudo bash .devcontainer/create-test-certificates.sh",
   "runArgs": ["-e", "GIT_EDITOR=code --wait", "--privileged"],
   "workspaceFolder": "/mnt/supervisor/apps/local/${localWorkspaceFolderBasename}",

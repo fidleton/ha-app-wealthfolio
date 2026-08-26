@@ -21,6 +21,9 @@ if jq -e 'has("image")' "$config" > /dev/null; then
   trap 'rm -f "$temporary_config"' EXIT
 
   jq 'del(.image)' "$config" > "$temporary_config"
+  if [ ! -f "${config}.org" ]; then
+    cp "$config" "${config}.org"
+  fi
   mv "$temporary_config" "$config"
 fi
 

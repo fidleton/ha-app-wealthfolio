@@ -1,0 +1,9 @@
+#!/command/with-contenv bashio
+set -e
+
+options=$(bashio::addon.options)
+old_key='authentication.username'
+if bashio::jq.exists "${options}" ".${old_key}"; then
+    bashio::log.info "Removing ${old_key}"
+    bashio::addon.option "${old_key}"
+fi

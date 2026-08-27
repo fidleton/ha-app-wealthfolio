@@ -18,19 +18,19 @@
       "name": "Secret key",
       "description": "Optional key used to encrypt stored secrets. When omitted, a key is generated and persisted automatically. Back up this key with the app data."
     },
-    "authentication": {
-      "name": "Authentication",
-      "description": "Credentials required for direct HTTPS access.",
+    "cors": {
+      "name": "CORS",
+      "description": "List of allowed origins for cross-origin requests. At least one origin must be specified for the app to function properly.",
       "fields": {
-        "username": {
-          "name": "Username",
-          "description": "Username for direct HTTPS access."
-        },
-        "password": {
-          "name": "Password",
-          "description": "Password for direct HTTPS access."
+        "url": {
+          "name": "Allowed origin",
+          "description": "Origin URL to allow for cross-origin requests."
         }
       }
+    },
+    "password": {
+      "name": "Password",
+      "description": "Password for Wealthfolio access."
     }
   }
 }

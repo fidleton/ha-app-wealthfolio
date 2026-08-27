@@ -1,61 +1,11 @@
 #!/command/with-contenv bashio
 set -e
-
 certificate_file="$(bashio::config 'ssl_tls.certificate_file')"
 private_key_file="$(bashio::config 'ssl_tls.private_key_file')"
-auth_username="$(bashio::config 'authentication.username')"
-auth_password="$(bashio::config 'authentication.password')"
 
-port=$(bashio::app.port 8443)
+ALL_CONFIGURED="$(bashio::jq "/var/www/localhost/htdocs/config-status.json" ".allConfigured")"
 
-# 2. Initialize variables to check configuration status (true/false)
-PORT_CONFIGURED="false"
-CERTIFICATE_CONFIGURED="false"
-KEY_CONFIGURED="false"
-USER_CONFIGURED="true"
-PWD_CONFIGURED="false"
-ALL_CONFIGURED="true"
-
-if bashio::var.has_value "${port}"; then PORT_CONFIGURED="true"; fi
-if bashio::var.has_value "${certificate_file}" && [ -r "/ssl/${certificate_file}" ]; then CERTIFICATE_CONFIGURED="true"; fi
-if bashio::var.has_value "${private_key_file}" && [ -r "/ssl/${private_key_file}" ]; then KEY_CONFIGURED="true"; fi
-
-if bashio::var.has_value "${auth_username}"; then USER_CONFIGURED="true"; fi
-if bashio::var.has_value "${auth_password}"; then PWD_CONFIGURED="true"; fi
-
-if [[ -z "${auth_username}" || "${auth_username}" == *:* || "${auth_username}" == *$'\n'* || "${auth_username}" == *$'\r'* ]]; then
-	bashio::log.error "External HTTPS authentication requires a non-empty username without colons or line breaks."
-	USER_CONFIGURED="false"
-fi
-if [[ -z "${auth_password}" ]]; then
-	bashio::log.error "External HTTPS authentication requires a non-empty password."
-	PWD_CONFIGURED="false"
-fi
-if [[ ! -r "/ssl/${certificate_file}" ]]; then
-	bashio::log.error "External HTTPS authentication requires a valid SSL/TLS certificate file."
-	CERTIFICATE_CONFIGURED="false"
-fi
-if [[ ! -r "/ssl/${private_key_file}" ]]; then
-	bashio::log.error "External HTTPS authentication requires a valid SSL/TLS private key file."
-	KEY_CONFIGURED="false"
-fi
-if [[ -z "${port}" || ! "${port}" =~ ^[0-9]+$ || "${port}" -lt 1 || "${port}" -gt 65535 ]]; then
-	bashio::log.error "External HTTPS authentication requires a valid port number between 1 and 65535."
-	PORT_CONFIGURED="false"
-fi
-
-# If any single mandatory option is missing, set overall status to false
-if [ "$USER_CONFIGURED" = "false" ] || [ "$PWD_CONFIGURED" = "false" ] || [ "$CERTIFICATE_CONFIGURED" = "false" ] || [ "$KEY_CONFIGURED" = "false" ] || [ "$PORT_CONFIGURED" = "false" ]; then
-	ALL_CONFIGURED="false"
-fi
 if [[ "${ALL_CONFIGURED}" == "true" ]]; then
-	bashio::log.info "External HTTPS authentication is fully configured."
-	password_hash="$(printf '%s' "${auth_password}" | openssl passwd -6 -stdin)"
-	printf '%s:%s\n' "${auth_username}" "${password_hash}" >/run/nginx.htpasswd
-	chown nginx:nginx /run/nginx.htpasswd
-	chmod 640 /run/nginx.htpasswd
-	printf 'auth_basic "Wealthfolio";\nauth_basic_user_file /run/nginx.htpasswd;\n' >/run/nginx-auth.conf
-
 	cp /etc/nginx/http.d/tls.conf.template /etc/nginx/http.d/tls.conf
 	sed -i \
 		-e "s|/ssl/fullchain\.pem|/ssl/${certificate_file}|g" \
@@ -63,19 +13,5 @@ if [[ "${ALL_CONFIGURED}" == "true" ]]; then
 		/etc/nginx/http.d/tls.conf
 
 fi
-# 3. Write a completely safe JSON file for the frontend (NO secrets are leaked)
-cat <<EOF >/var/www/localhost/htdocs/config-status.json
-{
-  "allConfigured": ${ALL_CONFIGURED},
-  "port": "${port}",
-  "options": [
-    { "name": "Certificate File", "configured": ${CERTIFICATE_CONFIGURED}, "description": "The SSL/TLS certificate file for secure connections." },
-    { "name": "Private Key File", "configured": ${KEY_CONFIGURED}, "description": "The SSL/TLS private key file for secure connections." },
-    { "name": "Wealthfolio web interface port", "configured": ${PORT_CONFIGURED}, "description": "The local network port of the Wealthfolio web service." },
-    { "name": "Username", "configured": ${USER_CONFIGURED}, "description": "The username for external HTTPS authentication." },
-    { "name": "Password", "configured": ${PWD_CONFIGURED}, "description": "The password for external HTTPS authentication." }
-  ]
-}
-EOF
 
 exec nginx -g 'daemon off;'

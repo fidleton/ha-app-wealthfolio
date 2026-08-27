@@ -6,18 +6,19 @@ server {
     ssl_certificate_key /ssl/privkey.pem;
     ssl_protocols TLSv1.2 TLSv1.3;
 
-    location / {
-        include /run/nginx-auth.conf;
+    # Optional but recommended
+    add_header Strict-Transport-Security "max-age=31536000" always;
+    client_max_body_size 25M
 
+    location / {
         proxy_pass http://127.0.0.1:8088;
         proxy_http_version 1.1;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto https;
+        proxy_set_header X-Forwarded-Proto $scheme;
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection $http_connection;
-        proxy_set_header Accept-Encoding "";
 
     }
 }

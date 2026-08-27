@@ -10,9 +10,9 @@ ingress and direct access from the network.
 Add this repository to Home Assistant, install the Wealthfolio app, then start
 it. Open the application with Home Assistant's **Open Web UI** button.
 
-Direct HTTPS access uses HTTP Basic Authentication. Configure the add-on's
-`authentication` username and password options. Home Assistant ingress access
-remains unchanged.
+Wealthfolio handles authentication. Configure the add-on's
+`password` option. Home Assistant ingress access remains
+unchanged.
 
 The app supports `amd64` and `aarch64` hosts. To enable direct HTTPS access,
 open the add-on's **Network** settings, assign a host port for `8443/tcp`, then
@@ -24,9 +24,10 @@ uses the Home Assistant certificates mounted at `/ssl/fullchain.pem` and
 
 - `secret_key`: optional. The app generates and persists a key automatically on
   first start when this is omitted.
-- `authentication.username`: username required for direct HTTPS access;
-  defaults to `wealthfolio`.
-- `authentication.password`: password required for direct HTTPS access.
+- `password`: password required for Wealthfolio access.
+- `cors`: list of origin URLs allowed to make cross-origin requests. Add at
+  least one origin for the app to function properly; the default is an empty
+  list.
 - `ssl_tls.certificate_file`: certificate filename in `/ssl`; defaults to
   `fullchain.pem`.
 - `ssl_tls.private_key_file`: private key filename in `/ssl`; defaults to
@@ -42,8 +43,9 @@ See [DOCS.md](DOCS.md) for configuration and backup details.
 
 ## Local development
 
-Use the repository's Dev Container so you get the nested Docker daemon and Home
-Assistant Supervisor tooling expected by Home Assistant app development.
+Use the repository's Dev Container so you get the nested Docker and containerd
+daemons, Home Assistant Supervisor tooling, and the VS Code extensions used by
+this project.
 
 1. Install the Dev Containers extension.
 2. Open this repository in VS Code and run **Dev Containers: Reopen in
@@ -69,15 +71,24 @@ Assistant Supervisor tooling expected by Home Assistant app development.
 
 5. Open the app through Home Assistant's **Open Web UI** ingress button.
 
-The devcontainer configures `1.1.1.1` for the nested Home Assistant
-Supervisor. If your host uses a VPN or corporate network, replace this with a
-DNS server reachable from that environment.
+The Dev Container publishes these local ports:
 
-For local HTTPS testing, port `7443` maps to the app's HTTPS port `8443`.
-The devcontainer creates a self-signed certificate for `localhost` in the
-Supervisor's `/mnt/supervisor/ssl` directory during startup. The add-on exposes
-that directory as `/ssl` at runtime. Browsers will show a certificate warning
-unless the generated certificate is trusted locally.
+- `7123`: Home Assistant (`8123` in the container).
+- `7180`: Home Assistant HTTP (`80` in the container).
+- `7357`: Supervisor diagnostics (`4357` in the container).
+- `7443`: app HTTPS (`8443` in the container).
+
+The container runs with the privileges and persistent Docker, containerd, and
+Supervisor volumes required by the nested Home Assistant environment. Its
+startup command runs `devcontainer_bootstrap` and then
+`.devcontainer/create-test-certificates.sh`. The latter creates a self-signed
+certificate for `localhost` at `/mnt/supervisor/ssl/fullchain.pem` and
+`/mnt/supervisor/ssl/privkey.pem` if they do not already exist.
+
+For local HTTPS testing, use `https://localhost:7443` after assigning the
+add-on's `8443/tcp` port. The add-on exposes the Supervisor's certificate
+directory as `/ssl` at runtime. Browsers will show a certificate warning unless
+the generated certificate is trusted locally.
 
 This project does not include a standalone local server command. The supported
 workflow is to run the app through Home Assistant's local Supervisor integration

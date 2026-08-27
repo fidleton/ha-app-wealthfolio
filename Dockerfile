@@ -12,7 +12,7 @@ ENV \
 
 USER root
 
-RUN apk add --no-cache bash ca-certificates curl jq nginx xz openssl \
+RUN apk add --no-cache argon2 bash ca-certificates curl jq nginx xz openssl \
 	&& S6_ARCH="${BUILD_ARCH}" \
 	&& if [ "${BUILD_ARCH}" = "amd64" ]; then S6_ARCH="x86_64"; fi \
 	&& curl -fsSL "https://github.com/just-containers/s6-overlay/releases/download/v${S6_OVERLAY_VERSION}/s6-overlay-noarch.tar.xz" | tar -xJp -C / \

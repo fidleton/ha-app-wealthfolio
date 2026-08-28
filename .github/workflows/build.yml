@@ -12,7 +12,7 @@ on:
 
 env:
   ARCHITECTURES: '["amd64", "aarch64"]'
-  IMAGE_NAME: ha-app-wealthfolio
+  IMAGE_NAME: ha-app-wealthfolio-wrapper
 
 permissions:
   contents: read

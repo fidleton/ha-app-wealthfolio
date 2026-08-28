@@ -1,18 +1,12 @@
-# Home Assistant app: Wealthfolio
+# Home Assistant app: Wealthfolio-wrapper
 
-Wealthfolio is a private portfolio tracker that stores its data locally.
-
-This app runs Wealthfolio behind an Nginx reverse proxy for Home Assistant
-ingress and direct access from the network.
+Wealthfolio-wrapper is a wrapper in order to run the Wealthfolio container 
+within Home Assistant.
 
 ## Installation
 
-Add this repository to Home Assistant, install the Wealthfolio app, then start
+Add this repository to Home Assistant, install the Wealthfolio-wrapper app, then start
 it. Open the application with Home Assistant's **Open Web UI** button.
-
-Wealthfolio handles authentication. Configure the add-on's
-`password` option. Home Assistant ingress access remains
-unchanged.
 
 The app supports `amd64` and `aarch64` hosts. To enable direct HTTPS access,
 open the add-on's **Network** settings, assign a host port for `8443/tcp`, then
@@ -24,7 +18,7 @@ uses the Home Assistant certificates mounted at `/ssl/fullchain.pem` and
 
 - `secret_key`: optional. The app generates and persists a key automatically on
   first start when this is omitted.
-- `password`: password required for Wealthfolio access.
+- `password`: password required for access.
 - `cors`: list of origin URLs allowed to make cross-origin requests. Add at
   least one origin for the app to function properly; the default is an empty
   list.
@@ -50,18 +44,7 @@ this project.
 1. Install the Dev Containers extension.
 2. Open this repository in VS Code and run **Dev Containers: Reopen in
    Container**.
-3. Prepare the local app environment so Supervisor builds this checkout instead
-   of using the published registry image:
-
-   ```sh
-   .devcontainer/prepare-local-addon.sh
-   ```
-
-   Alternatively, use the VS Code task **Prepare local App environment**. This
-   removes the `image` field from `config.json` temporarily so the current
-   checkout's `Dockerfile` is built and the app is installed as a local add-on.
-
-4. Start the local Home Assistant Supervisor from the container terminal:
+3. Start the local Home Assistant Supervisor from the container terminal:
 
    ```sh
    supervisor_run
@@ -69,7 +52,7 @@ this project.
 
    Alternatively, use the VS Code task **Start Home Assistant**.
 
-5. Open the app through Home Assistant's **Open Web UI** ingress button.
+4. Open the app through Home Assistant's **Open Web UI** ingress button.
 
 The Dev Container publishes these local ports:
 

@@ -30,7 +30,7 @@
     },
     "password": {
       "name": "Password",
-      "description": "Password for Wealthfolio access."
+      "description": "Password to access the web interface."
     }
   }
 }

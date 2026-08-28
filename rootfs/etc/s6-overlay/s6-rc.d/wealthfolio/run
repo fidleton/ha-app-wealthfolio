@@ -3,7 +3,7 @@ set -e
 
 ALL_CONFIGURED="$(bashio::jq "/var/www/localhost/htdocs/config-status.json" ".allConfigured")"
 if [[ "${ALL_CONFIGURED}" != "true" ]]; then
-    bashio::log.error "Wealthfolio is not fully configured. Please check the configuration status in the web interface."
+    bashio::log.error "Wealthfolio-wrapper is not fully configured. Please check the configuration status in the web interface."
     sleep infinity
     exit 1
 fi
@@ -15,7 +15,7 @@ fi
 secret_key=$(bashio::config "secret_key")
 auth_password=$(bashio::config "password")
 if [[ -z "${auth_password}" ]]; then
-    bashio::log.error "Wealthfolio authentication requires a non-empty password."
+    bashio::log.error "Authentication requires a non-empty password."
     exit 1
 fi
 cors_origin=$(bashio::jq "/data/options.json" ".cors | join(\",\")")

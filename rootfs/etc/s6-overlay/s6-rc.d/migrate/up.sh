@@ -43,8 +43,8 @@ cat <<EOF >/var/www/localhost/htdocs/config-status.json
   "options": [
     { "name": "Certificate File", "configured": ${CERTIFICATE_CONFIGURED}, "description": "The SSL/TLS certificate file for secure connections." },
     { "name": "Private Key File", "configured": ${KEY_CONFIGURED}, "description": "The SSL/TLS private key file for secure connections." },
-    { "name": "Wealthfolio web interface port", "configured": ${PORT_CONFIGURED}, "description": "The local network port of the Wealthfolio web service." },
-	{ "name": "Authentication", "configured": ${PASSWORD_CONFIGURED}, "description": "Wealthfolio authentication." },
+    { "name": "Web interface port", "configured": ${PORT_CONFIGURED}, "description": "The local network port of the web service." },
+	{ "name": "Authentication", "configured": ${PASSWORD_CONFIGURED}, "description": "Password used for authentication." },
 	{ "name": "CORS", "configured": ${CORS_CONFIGURED}, "description": "Cross-Origin Resource Sharing (CORS) configuration." }
   ]
 }

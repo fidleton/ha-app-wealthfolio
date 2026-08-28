@@ -1,7 +1,7 @@
 {
-  "name": "Wealthfolio",
+  "name": "Wealthfolio-wrapper",
   "version": "dev",
-  "slug": "wealthfolio",
+  "slug": "wealthfolio-wrapper",
   "description": "Private portfolio tracker for your personal finances.",
   "url": "https://github.com/fidleton/ha-app-wealthfolio",
   "arch": [
@@ -15,10 +15,10 @@
     "ssl:ro"
   ],
   "ports": {
-    "8443/tcp": null
+    "8443/tcp": 8443
   },
   "ports_description": {
-    "8443/tcp": "Wealthfolio web interface (HTTPS)"
+    "8443/tcp": "runs Wealthfolio web interface (HTTPS)"
   },
   "panel_icon": "mdi:chart-line",
   "options": {
